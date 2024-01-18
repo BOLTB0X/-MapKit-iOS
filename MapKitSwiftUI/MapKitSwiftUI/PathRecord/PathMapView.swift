@@ -10,9 +10,13 @@ import MapKit
 
 // MARK: - MapView
 struct PathMapView: UIViewRepresentable {
+    // MARK: - 프로퍼티s
     var userLocations: [CLLocationCoordinate2D]
     var isRecording: Bool
+    var timerState: TimerState
 
+    // MARK: - makeUIView
+    // 뷰가 그려질 때 호출
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.showsUserLocation = true
@@ -22,10 +26,12 @@ struct PathMapView: UIViewRepresentable {
         return mapView
     }
     
+    // MARK: - updateUIView
+    // 변경 시 업데이트 뷰
     func updateUIView(_ uiView: MKMapView, context: Context) {
         uiView.removeOverlays(uiView.overlays)
         
-        if isRecording && userLocations.count > 1 {
+        if timerState != .clear && userLocations.count > 1 {
             let polyline = MKPolyline(coordinates: userLocations, count: userLocations.count)
             uiView.addOverlay(polyline)
             
@@ -34,6 +40,8 @@ struct PathMapView: UIViewRepresentable {
         }
     }
     
+    // MARK: - makeCoordinator
+    // 좌표상에 MKPolylineRenderer
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
