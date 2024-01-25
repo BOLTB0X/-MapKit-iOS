@@ -53,6 +53,9 @@ class SurroundingMapViewModel: NSObject, ObservableObject, MKMapViewDelegate, CL
     @Published var currentLatitude: CLLocationDegrees = 0.0
     @Published var currentLongitude: CLLocationDegrees = 0.0
     
+    // MARK: Object
+    @Published var dbManager: RecordStore = RecordStore.shared
+    
     private var manager: CLLocationManager = {
         let manager = CLLocationManager()
         manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -69,11 +72,11 @@ class SurroundingMapViewModel: NSObject, ObservableObject, MKMapViewDelegate, CL
         
         requsetRecomm()
         
-//        RecordStore.shared.$records
-//            .sink { [weak self] records in
-//                self?.addFromDB(records: records)
-//            }
-//            .store(in: &cancellables)
+        RecordStore.shared.$records
+            .sink { [weak self] records in
+                self?.addFromDB(records: records)
+            }
+            .store(in: &cancellables)
         
         self.requestLocationManager()
     }
@@ -90,7 +93,7 @@ class SurroundingMapViewModel: NSObject, ObservableObject, MKMapViewDelegate, CL
             TmpRecomm(title: "공릉동 길2", image: "", Address: "서울특별시 공릉동", dist: "800m", time: "20m", coordinate: [.starbucks, .wpart])
         ]
         
-        
+        //addFromDB(records: dbManager.records)
     }
     
     // MARK: - addFromDB
@@ -101,7 +104,6 @@ class SurroundingMapViewModel: NSObject, ObservableObject, MKMapViewDelegate, CL
             print(ele)
             tmpRecomm.append(ele)
         }
-        objectWillChange.send()
         //print(tmpRecomm)
         
         return
@@ -163,6 +165,8 @@ class SurroundingMapViewModel: NSObject, ObservableObject, MKMapViewDelegate, CL
             }
         }
         
+        
+        
         return
     }
     
@@ -180,6 +184,8 @@ class SurroundingMapViewModel: NSObject, ObservableObject, MKMapViewDelegate, CL
                 allRoutes.append(route)
             }
         }
+        
+        
         
         drawAllRoutes(allRoutes)
         return

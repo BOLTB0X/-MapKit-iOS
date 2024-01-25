@@ -11,8 +11,7 @@ import MapKit
 // MARK: - SurroundingMapView
 struct SurroundingMapView: View {
     // MARK: Object
-    @ObservedObject var dbManager: RecordStore = RecordStore.shared
-
+    @EnvironmentObject var dbManager: RecordStore
     @ObservedObject private var viewModel = SurroundingMapViewModel()
     
     // MARK: State
@@ -22,7 +21,6 @@ struct SurroundingMapView: View {
     // MARK: - View
     var body: some View {
         ZStack(alignment: .center) {
-            Text("~~")
             // MARK: Map
             Map(position: $position, selection: $selection) {
                 ForEach(viewModel.tmpRecomm) { location in
@@ -30,26 +28,25 @@ struct SurroundingMapView: View {
                         .tint(.blue)
                 }
                 
-                ForEach(dbManager.records) { rec in
-                    if let loc = rec.userLocations {
-                        Marker(rec.title, coordinate: CLLocationCoordinate2D(latitude: loc.first!.latitude, longitude: loc.first!.longitude))
-                            .tint(.blue)
-
-                    }
-                }
+//                ForEach(dbManager.records) { rec in
+//                    if let loc = rec.userLocations {
+//                        Marker(rec.title, coordinate: CLLocationCoordinate2D(latitude: loc.first!.latitude, longitude: loc.first!.longitude))
+//                            .tint(.blue)
+//                        
+//                    }
+//                }
                 
                 ForEach(viewModel.routes, id: \.self) { route in
                     MapPolyline(route.polyline)
                         .stroke(.blue, lineWidth: 8)
                 }
                 
-                
             } // Map
             .onTapGesture { gestureLocation in
-               viewModel.mapView.convert(
-                gestureLocation,
-                toCoordinateFrom: viewModel.mapView
-               )
+                viewModel.mapView.convert(
+                    gestureLocation,
+                    toCoordinateFrom: viewModel.mapView
+                )
             }
             
             if let selection {
@@ -57,9 +54,9 @@ struct SurroundingMapView: View {
                     SurroundingMapState(pathInfo: $viewModel.selectedRecomm)
                 }
                 
-                if let _ = dbManager.records.first(where: { $0.id == selection.uuidString }) {
-                    SurroundingMapState(pathInfo: $viewModel.selectedRecomm)
-                }
+//                if let _ = dbManager.records.first(where: { $0.id == selection.uuidString }) {
+//                    SurroundingMapState(pathInfo: $viewModel.selectedRecomm)
+//                }
             } // if let selection
         } // ZStack
         
@@ -69,25 +66,26 @@ struct SurroundingMapView: View {
             } else {
                 guard let item = viewModel.tmpRecomm.first(where: { $0.id == selec }) else { return }
                 viewModel.findPathHaveId(id: item.id)
+                
             }
         } // onChange
-//        
+        
 //        .onChange(of: dbManager.records) { recordArr in
 //            viewModel.addFromDB(records: recordArr)
 //        }
         
         .onAppear {
-        
+            
             dbManager.startListening()
             
             viewModel.requestLocationManager()
+//            viewModel.addFromDB(records: recordArr)
         }
         
         .onDisappear {
             dbManager.stopListening()
-
+            
         }
-    
     } // body
 }
 
