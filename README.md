@@ -1,14 +1,12 @@
-# ScratchPaper_Map_in_iOS
+# MapKit - iOS
+
 Map 관련 연습
 
-## MapBox
-
-[Guides: Maps SDK for iOS](https://docs.mapbox.com/ios/maps/guides/)
-<br/>
-
-[SwiftUI User Guide](https://docs.mapbox.com/ios/maps/api/11.0.0/documentation/mapboxmaps/swiftui-user-guide)
-
 ## MapKit
+
+| 분류     | gif                                                                                                                                                                    |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 경로기록 | ![경로기록](https://github.com/BOLTB0X/MapKit-iOS/blob/main/history/%EB%B0%B1%EA%B7%B8%EB%9D%BC%EC%9A%B4%EC%83%81%ED%83%9C_%ED%85%8C%EC%8A%A4%ED%8A%B804.gif?raw=true) |
 
 [Mapkit 공식문서](https://developer.apple.com/documentation/mapkit/mapkit_for_swiftui)
 <br/>
